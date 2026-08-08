@@ -42,7 +42,7 @@ To run and deploy this workflow, ensure you have access to the following service
 
 ---
 
-## 🛠️ Step-by-Step Setup Guide
+## Step-by-Step Setup Guide
 
 1. **Import the Workflow:** Download `E-Commerce Price Monitoring Automation.json` and import it into your n8n instance via **Workflows → Import from File**.
 2. **Reconnect Credentials:** Re-link your personal credentials for each node (**Google Sheets**, **OpenAI**, and **Slack**) — exported workflows contain credential references, not authentication secrets.
