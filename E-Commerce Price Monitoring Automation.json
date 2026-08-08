@@ -1,0 +1,935 @@
+{
+  "name": "E-Commerce Price Monitoring Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtMinute": 30
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -416,
+        0
+      ],
+      "id": "432c6b3b-2246-4590-be6f-afab4dec9f27",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://www.ebay.com/p/4056251256?iid=389948084012&var=657174880983",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -128,
+        -96
+      ],
+      "id": "669330d7-5139-4a41-bde0-16ba0e8d0e19",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "url": "https://www.ebay.com/p/19049287599?iid=157271002092",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -144,
+        144
+      ],
+      "id": "04760649-6644-4123-a275-2f7e7623fd0b",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "Price",
+              "cssSelector": ".x-price-primary"
+            },
+            {
+              "key": "Title",
+              "cssSelector": "=title"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        176,
+        -96
+      ],
+      "id": "f0748a2b-2120-40ac-8aae-f37c4deadbe0",
+      "name": "HTML"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "Price",
+              "cssSelector": ".x-price-primary"
+            },
+            {
+              "key": "Title",
+              "cssSelector": "=title"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        176,
+        160
+      ],
+      "id": "62ca65aa-0ee6-46d1-b78b-3aeeaa728467",
+      "name": "HTML1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "60e8e45e-ee8c-4b92-9176-3b472a07c3b5",
+              "leftValue": "={{ $json.Price }}",
+              "rightValue": "Pri ",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "4bf49ab7-0e97-4585-8722-48f69b82f9e6",
+              "leftValue": "={{ $json.Title }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        432,
+        -96
+      ],
+      "id": "72598b38-563e-4aaf-96cb-d02191e0c29b",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "39e4b91a-5020-4091-90ba-0d2ab798109b",
+              "leftValue": "={{ $json.Price }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "680535be-2e6b-40c0-b5d3-b713739b3d6b",
+              "leftValue": "={{ $json.Title }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        432,
+        160
+      ],
+      "id": "7d19e342-3132-4b61-b3ed-682a584586f1",
+      "name": "If1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        720,
+        32
+      ],
+      "id": "ab0ed8d7-7fc0-4c4b-b60b-c4443f5055f9",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "language": "pythonNative",
+        "pythonCode": "# Loop over the incoming items from the Merge node\nfor item in _items:\n    # Ensure data keys are clean and ready for Google Sheets\n    # You can add any custom data formatting here if needed\n    pass\n\n# Return the items so they flow into the 'Append row in sheet' node\nreturn _items"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1008,
+        32
+      ],
+      "id": "2a2b0886-6474-4460-bd7d-8b0c7ed70b98",
+      "name": "Code in Python"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1TJZJxwiKIlvGm5rak1Uk-8Bxo05jvMzb7vCslSsY82E",
+          "mode": "list",
+          "cachedResultName": "Ecommerce",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TJZJxwiKIlvGm5rak1Uk-8Bxo05jvMzb7vCslSsY82E/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TJZJxwiKIlvGm5rak1Uk-8Bxo05jvMzb7vCslSsY82E/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Price": "={{ $json.Price }}",
+            "Title": "={{ $json.Title }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Price",
+              "displayName": "Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1280,
+        32
+      ],
+      "id": "03d14832-a171-4aa5-8ffb-ab29b2741ff4",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jv0dOpPEuQ5jpWFG",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1520,
+        -144
+      ],
+      "id": "6b1c7ff5-9809-4c79-a228-b8273419a9b4",
+      "name": "Wait",
+      "webhookId": "50b4a3d8-49ee-440e-a009-2b28a76a1f51"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a strict, concise e-commerce price-alert notification system designed to track and compare product prices against historical log data.  Execution Rules:No Narration or Filler: Never explain your steps or methodology, and never use conversational phrases like \"I checked the sheet.\"No Long Essays: Strictly avoid paragraphs, extra commentary, or conversational text.Mandatory Two-Line Output Format: You must always output exactly two lines using this precise format:📦 Product: [Product Name] — [Current Price]📊 Status: [Price drop detected / Normal price / Price increased]",
+        "options": {
+          "systemMessage": "You are a strict, concise price-alert notification system. Never explain your steps, never say \"I checked the sheet,\" and never output a long essay. Always provide a direct, short 2-line summary of the item, its current price, and whether it is a price drop."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1872,
+        144
+      ],
+      "id": "930250e9-65b4-4597-992a-484eef65f1dd",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1840,
+        464
+      ],
+      "id": "8e07a5bf-e1bd-481c-ae80-87dc4165c553",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "Q8w6x5sI7w3sUewk",
+          "name": "OpenAI account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1TJZJxwiKIlvGm5rak1Uk-8Bxo05jvMzb7vCslSsY82E",
+          "mode": "list",
+          "cachedResultName": "Ecommerce",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TJZJxwiKIlvGm5rak1Uk-8Bxo05jvMzb7vCslSsY82E/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TJZJxwiKIlvGm5rak1Uk-8Bxo05jvMzb7vCslSsY82E/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        2048,
+        448
+      ],
+      "id": "6502b56d-0dec-4cc8-a719-eec4f2ddf868",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jv0dOpPEuQ5jpWFG",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyze this product:\n- Title: {{ $json.Title }}\n- Price: {{ $json.Price }}\n\nUse your Get rows tool to check historical data, then output ONLY the following format:\n📦 Product: [Short Title]\n💰 Current Price: [Price]\n📊 Deal Status: [Is it a price drop or normal price?]",
+        "options": {
+          "systemMessage": "You are a strict, concise e-commerce price-alert notification system designed to track and compare product prices against historical log data.  Execution Rules:No Narration or Filler: Never explain your steps or methodology, and never use conversational phrases like \"I checked the sheet.\"No Long Essays: Strictly avoid paragraphs, extra commentary, or conversational text.Mandatory Two-Line Output Format: You must always output exactly two lines using this precise format:📦 Product: [Product Name] — [Current Price]📊 Status: [Price drop detected / Normal price / Price increased]"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1984,
+        -320
+      ],
+      "id": "54a5d553-b1ea-4d2a-adb2-fcffe41947d9",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        2048,
+        -96
+      ],
+      "id": "946dc46b-4e13-4a0e-bac2-4b7c959c7a31",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "Q8w6x5sI7w3sUewk",
+          "name": "OpenAI account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1TJZJxwiKIlvGm5rak1Uk-8Bxo05jvMzb7vCslSsY82E",
+          "mode": "list",
+          "cachedResultName": "Ecommerce",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TJZJxwiKIlvGm5rak1Uk-8Bxo05jvMzb7vCslSsY82E/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TJZJxwiKIlvGm5rak1Uk-8Bxo05jvMzb7vCslSsY82E/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": []
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        2272,
+        -80
+      ],
+      "id": "87cc5cf0-be1c-4e38-bbe2-afc4c709d89d",
+      "name": "Get row(s) in sheet in Google Sheets1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jv0dOpPEuQ5jpWFG",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "bd6061cc-aeee-43d3-8c03-b52cec25303c",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "price drop",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2288,
+        144
+      ],
+      "id": "174442d9-6487-4bdb-8fcf-8fa8e23b89a9",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "434db838-b7e4-40c8-9e7d-e60f39a334f6",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": " price drop",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2336,
+        -320
+      ],
+      "id": "436e47fe-cd98-4be8-9a35-7dd17a5cd4ab",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U0B11VAPPPY",
+          "mode": "list",
+          "cachedResultName": "aneesazakria21"
+        },
+        "text": "=🚨 *Price & Deal Update* 🚨\n\n*AI Analysis:*\n{{ $json.output }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.5,
+      "position": [
+        2592,
+        -336
+      ],
+      "id": "e43a6c50-646b-402c-a57d-7898a5ba1149",
+      "name": "Send a message",
+      "webhookId": "b28eb899-320d-4e22-9c3c-431633e22732",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "Ydo8Vb5hu2oyrDzu",
+          "name": "Slack account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U0B11VAPPPY",
+          "mode": "list",
+          "cachedResultName": "aneesazakria21"
+        },
+        "text": "=🚨 *Price & Deal Update* 🚨\n\n*AI Analysis:*\n{{ $json.output }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.5,
+      "position": [
+        2560,
+        144
+      ],
+      "id": "c5bd329d-f572-4d3f-a5a3-1c6b8e2564b1",
+      "name": "Send a message1",
+      "webhookId": "f2297e20-6c0b-47d1-b252-6702a03dc71f",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "Ydo8Vb5hu2oyrDzu",
+          "name": "Slack account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "049c65f4-6e3d-4700-8a49-a50e1bc643dd",
+              "leftValue": "={{ $json.Title }}",
+              "rightValue": "iPhone 14",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1712,
+        -304
+      ],
+      "id": "c2451f46-844e-4c0e-bad1-7d52787e18fa",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "0ed5af8f-4a69-4aa8-9093-765ec04cfc85",
+              "leftValue": "={{ $json.Title }}",
+              "rightValue": "iPhone 13",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1568,
+        144
+      ],
+      "id": "c3e5b3f8-06b7-4975-83eb-1bfe8abe4c78",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "content": "**Price monitoring**",
+        "height": 1024,
+        "width": 3456,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -464,
+        -384
+      ],
+      "typeVersion": 1,
+      "id": "1ab6eb98-2f7b-41bf-b446-94c9cb668765",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "HTML1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        []
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code in Python",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in Python": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "3065b63d-31b7-4e50-b098-4fa571f94094",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8587ff5bb331ccf2da0f526d32e6666f53803fcb75ca7e6cc9abcbbb73b5f983"
+  },
+  "nodeGroups": [],
+  "id": "bTIbLSbqvSpRFcSQ",
+  "tags": []
+}
