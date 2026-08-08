@@ -1,0 +1,90 @@
+# E-Commerce Price Monitoring & AI Alert System
+
+An advanced, production-ready **n8n automation workflow** designed to autonomously track, compare, and analyze e-commerce product prices over time. By combining scheduled data extraction, custom Python data transformation, historical Google Sheets logging, and **AI-driven market analysis**, this system eliminates manual tracking and delivers intelligent, actionable price alerts directly to Slack.
+
+---
+
+##Architectural Overview
+
+```text
+[Schedule Trigger] 
+       │
+       ├──► [HTTP Request 1] ──► [HTML Extract] ──► [Validation Check] ──┐
+       │                                                                ├──► [Merge] ──► [Python Transform] ──► [Google Sheets Log] ──► [AI Agent Analysis] ──► [Slack Alert]
+       └──► [HTTP Request 2] ──► [HTML Extract] ──► [Validation Check] ──┘
+
+```
+
+1. **Trigger & Parallel Scraping:** The workflow initiates on a recurring schedule (e.g., daily), simultaneously dispatching HTTP requests to target product URLs. HTML extraction nodes parse out key details such as product names and current prices.
+
+
+2. **Data Validation:** Conditional `If` nodes inspect the retrieved payloads, automatically filtering out incomplete or missing items to ensure database integrity.
+
+
+3. **Processing & Historical Logging:** Valid data streams are merged, passed through a custom **Python transformation node**, and appended to a **Google Sheets** historical tracking log.
+
+
+4. **AI-Driven Evaluation:** Integrated **AI Agents** query historical pricing from the spreadsheet, analyzing whether prices have increased, decreased, or remained unchanged, while identifying which product currently offers better value.
+
+
+5. **Intelligent Alerting:** If a significant price drop or favorable deal is detected, an automated **Slack notification** is dispatched; otherwise, the workflow completes silently without unnecessary noise.
+
+
+
+---
+
+## 🚀 Key Features
+
+* **Autonomous Operation:** Runs seamlessly on a schedule without manual oversight.
+
+
+* **Data Accuracy Guardrails:** Built-in validation checks discard faulty or missing scrapes before logging.
+
+
+* **Long-Term Trend Tracking:** Maintains a clean historical ledger in Google Sheets for retrospective analysis.
+
+
+* **Context-Aware AI Intelligence:** Utilizes LLM agents to evaluate pricing behavior against historical baselines.
+
+
+* **Noise Reduction:** Smart conditional logic ensures notifications are triggered only for meaningful market changes.
+
+
+
+---
+
+## 📋 Tech Stack & Prerequisites
+
+* **Orchestration Platform:** n8n (Cloud or Self-Hosted instance)
+
+
+* **Data Transformation:** Python
+
+
+* **Database / Logging:** Google Sheets
+
+
+* **AI & Messaging:** OpenAI Chat Models & Slack Bot Integration
+
+
+
+---
+
+## 🔮 Roadmap & Future Improvements
+
+* [ ] Implement **custom price threshold alerts** (triggering notifications only when prices drop below a user-defined target).
+
+
+* [ ] Generate automated **weekly and monthly executive summary reports**.
+
+
+* [ ] Enhance AI analytics to provide automated **"Buy vs. Wait"** purchasing recommendations.
+
+
+* [ ] Integrate robust error handling and retry logic for intermittent website timeouts.
+
+
+* [ ] Expand multi-store compatibility to support major retailers like Amazon, Walmart, and AliExpress.
+
+
+* [ ] Migrate historical tracking storage from Google Sheets to a scalable SQL database (PostgreSQL/Supabase).
